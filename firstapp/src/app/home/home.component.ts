@@ -14,6 +14,7 @@ export class HomeComponent {
   readonly baseUrl = '/assets';
   housingLocationList: Housinglocation[] = [];
   housingService: HousingService;
+  
 
   constructor(housingService: HousingService) {
     this.housingService = housingService;
