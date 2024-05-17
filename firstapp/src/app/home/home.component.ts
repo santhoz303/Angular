@@ -1,34 +1,38 @@
-import { Component,inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HousingLocationComponent } from '../housing-location/housing-location.component';
 import { CommonModule } from '@angular/common';
 import { Housinglocation } from '../housinglocation';
-import {HousingService} from '../housing.service';
+import { HousingService } from '../housing.service';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HousingLocationComponent,CommonModule],
+  imports: [HousingLocationComponent, CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
   readonly baseUrl = '/assets';
   housingLocationList: Housinglocation[] = [];
-  housingService: HousingService;
   filteredLocationList: Housinglocation[] = [];
 
-  constructor(housingService: HousingService) {
-    this.housingService = housingService;
-    this.housingLocationList = this.housingService.getAllHousingLocations();
-    this.filteredLocationList = this.housingLocationList;
+  // Inject the HousingService
+  constructor(private housingService: HousingService) {
+    // Now housingService is available and initialized
+    this.housingService.getAllHousingLocations().then((housingLocationList: Housinglocation[]) => {
+      this.housingLocationList = housingLocationList;
+      this.filteredLocationList = housingLocationList;
+    });
   }
+
   filterResults(text: string) {
     if (!text) {
       this.filteredLocationList = this.housingLocationList;
       return;
     }
     this.filteredLocationList = this.housingLocationList.filter((housingLocation) =>
-      housingLocation?.city.toLowerCase().includes(text.toLowerCase()),
+      housingLocation?.city.toLowerCase().includes(text.toLowerCase())
     );
   }
-
 }
+
